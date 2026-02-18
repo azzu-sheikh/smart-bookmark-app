@@ -1,0 +1,32 @@
+.main {
+  min-height: 100vh;
+  padding: 1rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.486);
+  padding-bottom: 1rem;
+}
+
+.headerTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.headerTitle span {
+  color: var(--neon-cyan);
+}
+
+.userTag {
+  font-size: 0.8rem;
+  color: rgba(6, 182, 212, 0.7);
+  letter-spacing: 0.1em;
+  
+}

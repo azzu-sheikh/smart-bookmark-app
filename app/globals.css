@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --neon-cyan: #22d3ee;
+  --neon-purple: #a78bfa;
+  --bg-dark: #0f172a; /* Slightly lighter than pure black */
+}
+
+body {
+  background-color: var(--bg-dark);
+  /* Made gradients brighter and larger */
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.25), transparent 40%),
+    radial-gradient(circle at 90% 50%, rgba(34, 211, 238, 0.2), transparent 40%);
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); }
+::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.5); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
