@@ -15,29 +15,29 @@ export default function AddBookmark() {
 
     setLoading(true)
 
-    // 1. Get the current user first
+    // 1. Get the current user ID
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      alert('You must be logged in to add a bookmark')
+      alert('Please log in to add bookmarks')
       setLoading(false)
       return
     }
 
-    // 2. Insert the bookmark WITH the user_id
+    // 2. Insert with user_id
     const { error } = await supabase.from('bookmarks').insert([
       { 
         title, 
-        url, 
-        user_id: user.id // <--- CRITICAL FIX: Explicitly assigning ownership
+        url,
+        user_id: user.id  // <--- THIS IS THE CRITICAL MISSING PIECE
       }
     ])
     
     setLoading(false)
 
     if (error) {
-      console.error('Insert Error:', error)
-      alert(error.message) // This should stop saying "violates RLS policy" now
+      console.error('Error adding bookmark:', error)
+      alert(error.message)
     } else {
       setTitle('')
       setUrl('')
