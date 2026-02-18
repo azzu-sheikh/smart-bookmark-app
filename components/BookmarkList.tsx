@@ -15,16 +15,18 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
   const supabase = createClient()
 
   useEffect(() => {
-    // 1. Log to confirm we are starting
-    console.log('🔌 Setting up Realtime connection...')
+    // Generate a unique channel name for this specific tab/component instance
+    // This prevents conflicts when React mounts/unmounts rapidly
+    const channelName = `realtime-bookmarks-${Math.random()}`
+    console.log(`🔌 Subscribing to channel: ${channelName}`)
 
     const channel = supabase
-      .channel('realtime-bookmarks')
+      .channel(channelName) // <--- UNIQUE NAME HERE
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'bookmarks' },
         (payload: any) => {
-          console.log('⚡ Change received!', payload) // Check browser console for this
+          console.log('⚡ Change received!', payload)
           
           if (payload.eventType === 'INSERT') {
             setBookmarks((prev) => [...prev, payload.new as Bookmark])
@@ -33,23 +35,15 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
           }
         }
       )
-      .subscribe((status: string, err: any) => {
-        console.log(`📡 Realtime Status: ${status}`, err ? err : '')
-        
-        if (status === 'SUBSCRIBED') {
-          console.log('✅ Ready to receive updates!')
-        }
-        
-        if (status === 'CHANNEL_ERROR') {
-          console.error('❌ Connection Error. Check your URL/Key and RLS policies.')
-        }
+      .subscribe((status: string) => {
+        console.log(`📡 Status for ${channelName}:`, status)
       })
 
     return () => {
-      console.log('🔌 Disconnecting...')
+      console.log(`🔌 Unsubscribing from ${channelName}`)
       supabase.removeChannel(channel)
     }
-  }, [])
+  }, []) // Empty dependency array ensures this runs once on mount
 
   const handleDelete = async (id: number) => {
     // Optimistic update
