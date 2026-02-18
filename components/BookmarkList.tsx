@@ -20,7 +20,7 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'bookmarks' },
-        (payload: any) => { // <--- FIXED: Added ': any' type here
+        (payload: any) => { // <--- Fixed previously
           console.log('Change received!', payload)
           if (payload.eventType === 'INSERT') {
             setBookmarks((prev) => [...prev, payload.new as Bookmark])
@@ -29,7 +29,7 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
           }
         }
       )
-      .subscribe((status) => {
+      .subscribe((status: any) => { // <--- FIXED THIS LINE NOW
         console.log('Realtime Status:', status)
       })
 
