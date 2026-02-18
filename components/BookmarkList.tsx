@@ -12,17 +12,15 @@ interface Bookmark {
 export default function BookmarkList({ initialBookmarks }: { initialBookmarks: Bookmark[] }) {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks)
   
-  // Now this uses the singleton client we fixed in Step 1
   const supabase = createClient()
 
   useEffect(() => {
-    // Unique channel name helps avoid conflicts
     const channel = supabase
       .channel('realtime-bookmarks')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'bookmarks' },
-        (payload) => {
+        (payload: any) => { // <--- FIXED: Added ': any' type here
           console.log('Change received!', payload)
           if (payload.eventType === 'INSERT') {
             setBookmarks((prev) => [...prev, payload.new as Bookmark])
@@ -32,7 +30,6 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
         }
       )
       .subscribe((status) => {
-        // This will log the connection status to your browser console
         console.log('Realtime Status:', status)
       })
 
