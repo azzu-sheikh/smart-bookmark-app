@@ -77,3 +77,15 @@
   box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
   border-color: #ef4444;
 }
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr; /* 1 card per row on small phones */
+    gap: 1rem;
+  }
+  
+  .card {
+    padding: 1.2rem;
+  }
+}

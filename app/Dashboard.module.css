@@ -30,3 +30,19 @@
   letter-spacing: 0.1em;
   
 }
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start; /* Align to the left */
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Make the Sign Out button full width on mobile for easier tapping */
+  .header > button {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+}

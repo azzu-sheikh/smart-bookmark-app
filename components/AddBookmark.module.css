@@ -72,3 +72,23 @@
   box-shadow: 0 0 20px rgba(34, 211, 238, 0.6);
   color: #000;
 }
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column; /* Force vertical stack */
+    align-items: stretch; /* Stretch inputs to full width */
+    padding: 1.25rem;
+    gap: 1.2rem;
+  }
+
+  .inputGroup {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .button {
+    width: 100%; /* Full width button on mobile */
+    margin-top: 0.5rem;
+  }
+}

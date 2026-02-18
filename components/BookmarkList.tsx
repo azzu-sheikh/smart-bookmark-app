@@ -15,13 +15,17 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
   const supabase = createClient()
 
   useEffect(() => {
+    // 1. Log to confirm we are starting
+    console.log('🔌 Setting up Realtime connection...')
+
     const channel = supabase
       .channel('realtime-bookmarks')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'bookmarks' },
-        (payload: any) => { // <--- Fixed previously
-          console.log('Change received!', payload)
+        (payload: any) => {
+          console.log('⚡ Change received!', payload) // Check browser console for this
+          
           if (payload.eventType === 'INSERT') {
             setBookmarks((prev) => [...prev, payload.new as Bookmark])
           } else if (payload.eventType === 'DELETE') {
@@ -29,11 +33,20 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
           }
         }
       )
-      .subscribe((status: any) => { // <--- FIXED THIS LINE NOW
-        console.log('Realtime Status:', status)
+      .subscribe((status: string, err: any) => {
+        console.log(`📡 Realtime Status: ${status}`, err ? err : '')
+        
+        if (status === 'SUBSCRIBED') {
+          console.log('✅ Ready to receive updates!')
+        }
+        
+        if (status === 'CHANNEL_ERROR') {
+          console.error('❌ Connection Error. Check your URL/Key and RLS policies.')
+        }
       })
 
     return () => {
+      console.log('🔌 Disconnecting...')
       supabase.removeChannel(channel)
     }
   }, [])
@@ -43,7 +56,7 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
     setBookmarks((prev) => prev.filter((b) => b.id !== id))
     const { error } = await supabase.from('bookmarks').delete().eq('id', id)
     if (error) {
-        alert(error.message)
+        alert('Delete failed: ' + error.message)
         window.location.reload()
     }
   }
