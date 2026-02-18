@@ -12,11 +12,32 @@ export default function AddBookmark() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!title || !url) return
+
     setLoading(true)
-    const { error } = await supabase.from('bookmarks').insert([{ title, url }])
+
+    // 1. Get the current user first
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      alert('You must be logged in to add a bookmark')
+      setLoading(false)
+      return
+    }
+
+    // 2. Insert the bookmark WITH the user_id
+    const { error } = await supabase.from('bookmarks').insert([
+      { 
+        title, 
+        url, 
+        user_id: user.id // <--- CRITICAL FIX: Explicitly assigning ownership
+      }
+    ])
+    
     setLoading(false)
+
     if (error) {
-      alert(error.message)
+      console.error('Insert Error:', error)
+      alert(error.message) // This should stop saying "violates RLS policy" now
     } else {
       setTitle('')
       setUrl('')
