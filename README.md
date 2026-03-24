@@ -1,6 +1,7 @@
 # Smart Bookmark App
+Keeping your favorite corners of the internet all in one cozy place. ✨
 
-A real-time bookmark manager built with Next.js 15 (App Router) and Supabase. Users can log in with Google, save private bookmarks, and see updates instantly across devices without refreshing the page.
+## A real-time bookmark manager built with Next.js 15 (App Router) and Supabase. Users can log in with Google, save private bookmarks, and see updates instantly across devices without refreshing the page.
 
 ## 🚀 Features
 * **Google OAuth Authentication**: Secure passwordless login.
